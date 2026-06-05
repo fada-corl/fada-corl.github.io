@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="FADA: Few-Shot Domain Adaptation via Dynamics Alignment for Humanoid Control">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FADA: Few-Shot Domain Adaptation via Dynamics Alignment for Humanoid Control</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <meta property="og:site_name" content="FADA" />
+  <meta property="og:title" content="FADA: Few-Shot Domain Adaptation via Dynamics Alignment for Humanoid Control" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FADA" />
+
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #5f6b7a;
+      --line: #d8dee6;
+      --panel: #f6f8fb;
+      --green: #2f7d4f;
+      --red: #b94747;
+      --blue: #235fa7;
+      --gold: #9a6a1f;
+    }
+
+    body {
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    .hero-body {
+      padding-bottom: 2.5rem;
+    }
+
+    .publication-title {
+      line-height: 1.12;
+      max-width: 1120px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .anonymous-subtitle {
+      color: var(--muted);
+      font-family: 'Google Sans', sans-serif;
+      margin-top: 1rem;
+    }
+
+    .claim-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.65rem;
+      margin-top: 1.25rem;
+    }
+
+    .claim-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.48rem 0.9rem;
+      background: #fff;
+      color: #2d3748;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 1.6rem;
+    }
+
+    .section {
+      padding-top: 2.7rem;
+      padding-bottom: 2.7rem;
+    }
+
+    .section-muted {
+      background: var(--panel);
+      border-top: 1px solid #edf0f5;
+      border-bottom: 1px solid #edf0f5;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-copy {
+      max-width: 920px;
+      margin: 0 auto 1.5rem auto;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.65;
+      text-align: center;
+    }
+
+    .overview-video {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #000;
+      box-shadow: 0 12px 35px rgba(31, 41, 51, 0.12);
+    }
+
+    .figure-frame {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 0.75rem;
+      box-shadow: 0 10px 30px rgba(31, 41, 51, 0.08);
+    }
+
+    .figure-frame img {
+      display: block;
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .method-step,
+    .result-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 1rem;
+      height: 100%;
+    }
+
+    .step-index {
+      color: var(--blue);
+      font-weight: 700;
+      font-family: 'Google Sans', sans-serif;
+      margin-bottom: 0.35rem;
+    }
+
+    .method-step h3,
+    .result-card h3 {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+
+    .method-step p,
+    .result-card p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .video-task {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e9f0;
+    }
+
+    .video-task:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .task-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .task-heading h3 {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .task-heading span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .video-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .video-card video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #111;
+    }
+
+    .video-card.portrait video {
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+    }
+
+    .video-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.65rem 0.75rem;
+      border-top: 1px solid var(--line);
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0.18rem 0.55rem;
+      font-size: 0.78rem;
+      line-height: 1.2;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .badge-tfd { background: var(--red); }
+    .badge-zs { background: var(--gold); }
+    .badge-fada { background: var(--green); }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .metric {
+      display: block;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 0.35rem;
+    }
+
+    .footer {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    @media screen and (max-width: 1023px) {
+      .method-grid,
+      .result-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .publication-title {
+        font-size: 2.15rem !important;
+      }
+
+      .claim-pill {
+        white-space: normal;
+      }
+
+      .method-grid,
+      .result-grid,
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .task-heading {
+        display: block;
+      }
+
+      .task-heading span {
+        display: block;
+        margin-top: 0.25rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">
+              FADA: Few-Shot Domain Adaptation via Dynamics Alignment for Humanoid Control
+            </h1>
+            <div class="is-size-4 anonymous-subtitle">
+              Anonymous CoRL 2026 Submission
+            </div>
+            <div class="claim-row" aria-label="Key properties">
+              <span class="claim-pill">Few-shot target rollouts</span>
+              <span class="claim-pill">No target rewards</span>
+              <span class="claim-pill">No motion-capture labels</span>
+              <span class="claim-pill">No simulator calibration</span>
+              <span class="claim-pill">IDM-only LoRA adaptation</span>
+            </div>
+            <div class="nav-links">
+              <a class="button is-normal is-rounded is-dark" href="#method">Method</a>
+              <a class="button is-normal is-rounded is-dark" href="#hardware">Hardware Results</a>
+              <a class="button is-normal is-rounded is-dark" href="#data">Data Collection</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted" id="abstract">
+    <div class="container is-max-desktop">
+      <h2 class="title is-2 section-title">Abstract</h2>
+      <div class="content has-text-justified is-size-5">
+        <p>
+          High-precision humanoid control is sensitive to target-domain dynamics shifts such as terrain changes,
+          payloads, and actuator response mismatch. FADA addresses this setting with a Planner-Inverse Dynamics
+          Model policy that separates task intent from action realization. A privileged oracle is first distilled
+          into a deployable Planner-IDM student in simulation. At deployment, the planner is frozen and only the
+          IDM is adapted with LoRA using a small set of target-domain observation-action rollouts. This aligns the
+          action-generation module with the target dynamics while preserving the source-trained task interface.
+          Across humanoid hardware and sim-to-sim experiments, the same adaptation principle improves deployment
+          under locomotion, whole-body tracking, payload, and terrain shifts without requiring target rewards,
+          privileged labels, simulator refitting, or full-policy finetuning.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="method">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-2 section-title">Method Overview</h2>
+      <p class="section-copy">
+        FADA uses the same task command semantics before and after transfer, but adapts how the intended motion is
+        converted into actions under the target dynamics.
+      </p>
+      <div class="figure-frame">
+        <img src="./static/images/framework.png" alt="FADA training, data collection, adaptation, and deployment pipeline">
+      </div>
+      <div class="method-grid">
+        <div class="method-step">
+          <div class="step-index">Stage 1</div>
+          <h3>Oracle Training</h3>
+          <p>Train a privileged oracle policy in the source simulator using task rewards and privileged state.</p>
+        </div>
+        <div class="method-step">
+          <div class="step-index">Stage 2</div>
+          <h3>Planner-IDM Distillation</h3>
+          <p>Distill the oracle into a deployable student that predicts proprioceptive intent and actions.</p>
+        </div>
+        <div class="method-step">
+          <div class="step-index">Stage 3</div>
+          <h3>Few-Shot Rollouts</h3>
+          <p>Collect short target-domain rollouts using only observations, commands, and executed actions.</p>
+        </div>
+        <div class="method-step">
+          <div class="step-index">Stage 4</div>
+          <h3>IDM Adaptation</h3>
+          <p>Freeze the planner and adapt only LoRA parameters in the IDM with supervised action prediction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted" id="architecture">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-2 section-title">Planner-IDM Architecture</h2>
+      <p class="section-copy">
+        The planner predicts a short-horizon proprioceptive future from command and observation history. The IDM
+        maps that future together with recent execution history to an action chunk, while deployment executes only
+        the first action in a receding-horizon loop.
+      </p>
+      <div class="figure-frame">
+        <img src="./static/images/architecture.png" alt="Planner and inverse dynamics model transformer architecture">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="hardware">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-2 section-title">Real-World Humanoid Results</h2>
+      <p class="section-copy">
+        FADA is evaluated on Unitree G1 and Booster T1 under target dynamics shifts induced by terrain,
+        payloads, contact, and whole-body motion tracking demands.
+      </p>
+
+      <div class="video-task">
+        <div class="task-heading">
+          <h3>G1 Slope Traversal</h3>
+          <span>Narrow ramp traversal under terrain-induced dynamics shift</span>
+        </div>
+        <div class="video-grid">
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_slope-tfdagger/g1_slope-tfdagger-1.mp4"></video>
+            <div class="video-label">TF&ndash;DAgger <span class="badge badge-tfd">Baseline</span></div>
+          </div>
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_slope-FADA-ZS/g1_slope-FADA-ZS-1.mp4"></video>
+            <div class="video-label">FADA-zs <span class="badge badge-zs">Zero-shot</span></div>
+          </div>
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_slope-FADA/g1_slope-FADA-1.mp4"></video>
+            <div class="video-label">FADA <span class="badge badge-fada">Adapted</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-task">
+        <div class="task-heading">
+          <h3>G1 Payload Locomotion</h3>
+          <span>Grocery carrying through poles with asymmetric handheld payloads</span>
+        </div>
+        <div class="video-grid">
+          <div class="video-card portrait">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_grocery_carrying-tfdagger/g1_grocery_carrying-tfdagger-1.mp4"></video>
+            <div class="video-label">TF&ndash;DAgger <span class="badge badge-tfd">Baseline</span></div>
+          </div>
+          <div class="video-card portrait">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_grocery_carrying-FADA-ZS/g1_grocery_carrying-FADA-ZS-1.mp4"></video>
+            <div class="video-label">FADA-zs <span class="badge badge-zs">Zero-shot</span></div>
+          </div>
+          <div class="video-card portrait">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_grocery_carrying-FADA/g1_grocery_carrying-FADA-1.mp4"></video>
+            <div class="video-label">FADA <span class="badge badge-fada">Adapted</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-task">
+        <div class="task-heading">
+          <h3>G1 Kung Fu on Soft Terrain</h3>
+          <span>Whole-body tracking on deformable mats</span>
+        </div>
+        <div class="video-grid">
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_kungfu_mat-tfdagger/g1_kungfu_mat-tfdagger-1.mp4"></video>
+            <div class="video-label">TF&ndash;DAgger <span class="badge badge-tfd">Baseline</span></div>
+          </div>
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_kungfu_mat-FADA-ZS/g1_kungfu_mat-FADA-ZS-1.mp4"></video>
+            <div class="video-label">FADA-zs <span class="badge badge-zs">Zero-shot</span></div>
+          </div>
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_kungfu_mat-FADA/g1_kungfu_mat-FADA-1.mp4"></video>
+            <div class="video-label">FADA <span class="badge badge-fada">Adapted</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-task">
+        <div class="task-heading">
+          <h3>T1 Payload Locomotion</h3>
+          <span>Circular locomotion with asymmetric arm payload</span>
+        </div>
+        <div class="video-grid">
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/t1_circle-tfdagger/t1_circle-tfdagger-1.mp4"></video>
+            <div class="video-label">TF&ndash;DAgger <span class="badge badge-tfd">Baseline</span></div>
+          </div>
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/t1_circle-FADA-ZS/t1_circle-FADA-ZS-1.mp4"></video>
+            <div class="video-label">FADA-zs <span class="badge badge-zs">Zero-shot</span></div>
+          </div>
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/t1_circle-FADA/t1_circle-FADA-1.mp4"></video>
+            <div class="video-label">FADA <span class="badge badge-fada">Adapted</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-task">
+        <div class="task-heading">
+          <h3>T1 Basket Pulling</h3>
+          <span>Backward straight-line tracking while pulling a loaded basket</span>
+        </div>
+        <div class="video-grid">
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/t1_basket_pulling-tfdagger/t1_basket_pulling-tfdagger-1.mp4"></video>
+            <div class="video-label">TF&ndash;DAgger <span class="badge badge-tfd">Baseline</span></div>
+          </div>
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/t1_basket_pulling-FADA-ZS/t1_basket_pulling-FADA-ZS-1.mp4"></video>
+            <div class="video-label">FADA-zs <span class="badge badge-zs">Zero-shot</span></div>
+          </div>
+          <div class="video-card">
+            <video controls muted loop playsinline preload="metadata" src="./static/videos/t1_basket_pulling-FADA/t1_basket_pulling-FADA-1.mp4"></video>
+            <div class="video-label">FADA <span class="badge badge-fada">Adapted</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-task">
+        <div class="task-heading">
+          <h3>Additional Qualitative Deployments</h3>
+          <span>More terrain and payload-shifted rollouts</span>
+        </div>
+
+        <div class="video-task">
+          <div class="task-heading">
+            <h3>G1 Kung Fu on Sand</h3>
+            <span>Loose terrain whole-body tracking</span>
+          </div>
+          <div class="video-grid">
+            <div class="video-card">
+              <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_kungfu_sand-tfdagger/g1_kungfu_sand-tfdagger-1.mp4"></video>
+              <div class="video-label">TF&ndash;DAgger <span class="badge badge-tfd">Baseline</span></div>
+            </div>
+            <div class="video-card">
+              <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_kungfu_sand-FADA-ZS/g1_kungfu_sand-FADA-ZS-1.mp4"></video>
+              <div class="video-label">FADA-zs <span class="badge badge-zs">Zero-shot</span></div>
+            </div>
+            <div class="video-card">
+              <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_kungfu_sand-FADA/g1_kungfu_sand-FADA-1.mp4"></video>
+              <div class="video-label">FADA <span class="badge badge-fada">Adapted</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="video-task">
+          <div class="task-heading">
+            <h3>G1 Dancing with Payload</h3>
+            <span>Whole-body motion tracking with a front payload</span>
+          </div>
+          <div class="video-grid">
+            <div class="video-card">
+              <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_dancing-tfdagger/g1_dancing-tfdagger-1.mp4"></video>
+              <div class="video-label">TF&ndash;DAgger <span class="badge badge-tfd">Baseline</span></div>
+            </div>
+            <div class="video-card">
+              <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_dancing-FADA-ZS/g1_dancing-FADA-ZS-1.mp4"></video>
+              <div class="video-label">FADA-zs <span class="badge badge-zs">Zero-shot</span></div>
+            </div>
+            <div class="video-card">
+              <video controls muted loop playsinline preload="metadata" src="./static/videos/g1_dancing-FADA/g1_dancing-FADA-1.mp4"></video>
+              <div class="video-label">FADA <span class="badge badge-fada">Adapted</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted" id="results">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-2 section-title">Quantitative Summary</h2>
+      <p class="section-copy">
+        The hardware and sim-to-sim trends support the same conclusion: target rollouts are most useful when they
+        adapt the action-generation module rather than a monolithic policy or future-prediction objective.
+      </p>
+      <div class="result-grid">
+        <div class="result-card">
+          <span class="metric">20% to 90%</span>
+          <h3>Hardware Success Tasks</h3>
+          <p>Average success increases from FADA-zs to adapted FADA on completion-style hardware tasks.</p>
+        </div>
+        <div class="result-card">
+          <span class="metric">27.4%</span>
+          <h3>Tracking Error Reduction</h3>
+          <p>Adapted FADA reduces normalized hardware tracking errors relative to the FADA-zs policy.</p>
+        </div>
+        <div class="result-card">
+          <span class="metric">24.7%</span>
+          <h3>MuJoCo Transfer Gain</h3>
+          <p>Across five sim-to-sim transfer tasks, FADA reduces normalized error relative to FADA-zs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="data">
+    <div class="container is-max-desktop">
+      <h2 class="title is-2 section-title">Few-Shot Target Data Collection</h2>
+      <p class="section-copy">
+        FADA adapts from ordinary target-domain rollouts collected by executing the source-trained policy. The
+        supervision consists of paired proprioceptive observations and executed actions from the same rollout
+        windows; no reward, labeling, privileged state, or off-policy dataset is required.
+      </p>
+      <video class="overview-video" controls muted playsinline preload="metadata">
+        <source src="./static/videos/data_collection/data_collection-1.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <p>Anonymous supplementary project page. Page template adapted from <a href="https://nerfies.github.io/"><span class="dnerf">Nerfies</span></a>.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
