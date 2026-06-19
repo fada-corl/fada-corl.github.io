@@ -7,6 +7,7 @@ interface NavItem {
 }
 
 const ITEMS: NavItem[] = [
+  { id: 'overview', label: 'Overview' },
   { id: 'abstract', label: 'Abstract' },
   { id: 'method', label: 'Method' },
   { id: 'results', label: 'Results' },

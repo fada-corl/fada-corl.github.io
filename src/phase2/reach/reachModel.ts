@@ -3,7 +3,7 @@
  *
  * IMPORTANT (hard-won): the demo ships the FULL G1 29-DOF model and reproduces the
  * deployment sim by HARD-PINNING the base + every non-arm joint to its default on
- * EVERY physics substep (see `meshcat_reach_viewer.py::_lock_base` and the verified
+ * EVERY physics substep (the base-lock convention, mirrored by the verified
  * loop in ReachArm). A stripped/welded arm-only model has correct kinematics but
  * subtly different dynamics, and the few-shot-adapted (After) policies — finetuned
  * against this exact locked full-body sim — only show their advantage here.
@@ -41,9 +41,12 @@ export const ARM_BODY_NAMES = [
   'left_wrist_yaw_link',
 ] as const
 
-/** Site that defines the end-effector (palm) — read `data.site_xpos`. */
-export const EE_SITE = 'left_palm'
-/** Wrist body that carries the payload mass. */
+/**
+ * Body that defines the end-effector. The training reach manager and the
+ * deployment EE metric both use the `left_wrist_yaw_link` body origin (NOT the
+ * rubber-hand `left_palm` site), so the EE marker + reach error read from here.
+ * This body also carries the payload mass.
+ */
 export const EE_BODY = 'left_wrist_yaw_link'
 /** Pelvis (base) body; EE error is measured relative to its world position. */
 export const BASE_BODY = 'pelvis'
